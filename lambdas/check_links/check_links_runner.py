@@ -10,7 +10,7 @@ import redis
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 
 # Rest API endpoint where we want to gather doi's to check from.
-API_ENDPOINT = "https://api.datacite.org/works"
+API_ENDPOINT =  os.getenv('API_ENDPOINT', 'https://api.datacite.org/works')
 
 # Redis key collections for urls and results
 START_URLS_KEY = os.getenv('START_URLS_KEY', 'pidcheck:start_urls')
