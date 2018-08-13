@@ -52,7 +52,7 @@ def get_samples(sample_per_client=1):
                 }
                 results.append(result)
 
-            total_pages = data['meta']['total_pages']
+            total_pages = data['meta']['total-pages']
 
         page += 1
 
