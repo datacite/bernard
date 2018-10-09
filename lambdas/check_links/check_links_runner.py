@@ -1,4 +1,4 @@
-"""Seed links for checking to the PidCheck service via redis"""
+"""Seed links for checking to the link check crawler service via redis"""
 
 import urllib.request
 import urllib.parse
