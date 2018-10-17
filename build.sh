@@ -19,7 +19,7 @@ function packagePythonLambda {
     # Copy lambda src
     cp $SRC_DIR/$proj/$proj\_runner.py $BUILD_DIR/$proj/
     # Zip it
-    cd $BUILD_DIR/$proj/ && zip -r ../$proj.zip ./* && cd -
+    cd $BUILD_DIR/$proj/ && zip -r ../$proj.py.zip ./* && cd -
     # Delete working dir
     rm -r $BUILD_DIR/$proj
 }
