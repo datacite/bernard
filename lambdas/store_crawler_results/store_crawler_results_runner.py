@@ -52,7 +52,7 @@ def pop_result():
 def push_result(result):
     """Push a link check result back to redis"""
     try:
-        redis.lpush(RESULTS_ITEMS_KEY, result)
+        redis.rpush(RESULTS_ITEMS_KEY, result)
     except:
         # This is bad
         logging.error("While trying to store a link check result we failed storing back in redis. result: {0}".format(result))
