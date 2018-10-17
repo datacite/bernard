@@ -24,7 +24,7 @@ ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 # Batch size to process in results
-BATCH_SIZE = 1000
+BATCH_SIZE = os.getenv('BATCH_SIZE', 500)
 
 # Configure basic logging
 logger = logging.getLogger()
