@@ -1,4 +1,4 @@
-"""Store links from the results from the link check crawler via redis"""
+"""Store link checker crawler results via redis"""
 
 import urllib.request
 import base64
@@ -92,9 +92,6 @@ def process_result(result):
 
 def send_result(doi, checked_date, content_type, landing_page, status, meta):
     """Send the result to datacite API for storage and updating matched doi"""
-
-    ADMIN_USERNAME = "datacite.rph"
-    ADMIN_PASSWORD = "7FLkb6F7jsXliJQ6zkLl"
 
     credentials = ('%s:%s' % (ADMIN_USERNAME, ADMIN_PASSWORD))
     encoded_credentials = base64.b64encode(credentials.encode('ascii'))
