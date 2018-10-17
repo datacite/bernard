@@ -24,7 +24,7 @@ ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 # Batch size to process in results
-BATCH_SIZE = 1
+BATCH_SIZE = 1000
 
 # Configure basic logging
 logger = logging.getLogger()
@@ -125,7 +125,6 @@ def send_result(doi, checked_date, content_type, landing_page, status, meta):
             logger.info("Successfully pushed doi {0} link check results to DataCite API".format(doi))
     except urllib.error.HTTPError as e:
         r = json.loads(e.read())
-        print(e.headers)
         message = e.reason
         errors = r.get('errors')
         if errors:
