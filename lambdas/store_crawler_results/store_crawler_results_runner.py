@@ -78,14 +78,14 @@ def process_result(result):
     # The other metadata we have for the result
     meta = {
         "error" : result.get('error', ''),
-        "redirect-count" : result.get('redirect_count', 0),
-        "redirect-urls" : result.get('redirect_urls', []),
-        "download-latency" : result.get('download_latency'),
-        "has-schema-org" : bool(result.get('schema_org')),
-        "schema-org-id" : result.get('schema_org_id'),
-        "dc-identifier" : result.get('dc_identifier'),
-        "citation-doi" : result.get('citiation_doi'),
-        "body-has-pid" : result.get('body_has_pid'),
+        "redirectCount" : result.get('redirect_count', 0),
+        "redirectUrls" : result.get('redirect_urls', []),
+        "downloadLatency" : result.get('download_latency'),
+        "hasSchemaOrg" : bool(result.get('schema_org')),
+        "schemaOrgId" : result.get('schema_org_id'),
+        "dcIdentifier" : result.get('dc_identifier'),
+        "citationDoi" : result.get('citiation_doi'),
+        "bodyHasPid" : result.get('body_has_pid'),
     }
 
     return doi, checked_date, content_type, landing_page, status, meta
@@ -101,11 +101,11 @@ def send_result(doi, checked_date, content_type, landing_page, status, meta):
         "data" : {
             "type" : "dois",
             "attributes" : {
-                "last-landing-page" : landing_page,
-                "last-landing-page-status" : status,
-                "last-landing-page-status-check" : checked_date,
-                "last-landing-page-content-type" : content_type,
-                "last-landing-page-status-result" : meta
+                "lastLandingPage" : landing_page,
+                "lastLandingPageStatus" : status,
+                "lastLandingPageStatusCheck" : checked_date,
+                "lastLandingPageContentType" : content_type,
+                "lastLandingPageStatusResult" : meta
             }
         }
     }
