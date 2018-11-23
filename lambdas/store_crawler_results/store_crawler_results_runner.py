@@ -75,12 +75,16 @@ def process_result(result):
     # URL we checked
     landing_page = result.get('checked_url', '')
 
+    # PidCheck raw data has this as a very precise MS with floating points
+    # So convert this into a float and round it.
+    download_latency = round(float(result.get('download_latency')))
+
     # The other metadata we have for the result
     meta = {
         "error" : result.get('error', ''),
         "redirectCount" : result.get('redirect_count', 0),
         "redirectUrls" : result.get('redirect_urls', []),
-        "downloadLatency" : result.get('download_latency'),
+        "downloadLatency" : download_latency,
         "hasSchemaOrg" : bool(result.get('schema_org')),
         "schemaOrgId" : result.get('schema_org_id'),
         "dcIdentifier" : result.get('dc_identifier'),
