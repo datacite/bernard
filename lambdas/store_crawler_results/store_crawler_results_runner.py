@@ -73,28 +73,32 @@ def process_result(result):
     content_type = result.get('content_type', '')
 
     # URL we checked
-    landing_page = result.get('checked_url', '')
+    url = result.get('checked_url', '')
 
     # PidCheck raw data has this as a very precise MS with floating points
     # So convert this into a float and round it.
-    download_latency = round(float(result.get('download_latency')))
+    download_latency = round(float(result.get('download_latency', 0)))
 
-    # The other metadata we have for the result
-    meta = {
-        "error" : result.get('error', ''),
-        "redirectCount" : result.get('redirect_count', 0),
-        "redirectUrls" : result.get('redirect_urls', []),
-        "downloadLatency" : download_latency,
-        "hasSchemaOrg" : bool(result.get('schema_org')),
-        "schemaOrgId" : result.get('schema_org_id'),
-        "dcIdentifier" : result.get('dc_identifier'),
-        "citationDoi" : result.get('citiation_doi'),
-        "bodyHasPid" : result.get('body_has_pid'),
+    # Build the results into one object
+    landing_page = {
+        "checked": checked_date,
+        "url": url,
+        "status": status,
+        "contentType": content_type,
+        "error": result.get('error', ''),
+        "redirectCount": result.get('redirect_count', 0),
+        "redirectUrls": result.get('redirect_urls', []),
+        "downloadLatency": download_latency,
+        "hasSchemaOrg": bool(result.get('schema_org')),
+        "schemaOrgId": result.get('schema_org_id'),
+        "dcIdentifier": result.get('dc_identifier'),
+        "citationDoi": result.get('citiation_doi'),
+        "bodyHasPid": result.get('body_has_pid'),
     }
 
-    return doi, checked_date, content_type, landing_page, status, meta
+    return doi, landing_page
 
-def send_result(doi, checked_date, content_type, landing_page, status, meta):
+def send_result(doi, landing_page):
     """Send the result to datacite API for storage and updating matched doi"""
 
     credentials = ('%s:%s' % (ADMIN_USERNAME, ADMIN_PASSWORD))
@@ -105,11 +109,7 @@ def send_result(doi, checked_date, content_type, landing_page, status, meta):
         "data" : {
             "type" : "dois",
             "attributes" : {
-                "lastLandingPage" : landing_page,
-                "lastLandingPageStatus" : status,
-                "lastLandingPageStatusCheck" : checked_date,
-                "lastLandingPageContentType" : content_type,
-                "lastLandingPageStatusResult" : meta
+                "landingPage" : landing_page,
             }
         }
     }
@@ -151,10 +151,10 @@ def lambda_handler(event, context):
 
         try:
             # Parse the data we want to store
-            doi, checked_date, content_type, landing_page, status, meta = process_result(raw_result)
+            doi, landing_page = process_result(raw_result)
 
             # Send request to Lupo via /doi/DOI
-            send_result(doi, checked_date, content_type, landing_page, status, meta)
+            send_result(doi, landing_page)
         except Exception as e:
             logger.error("Unexpected error, pushing back onto redis, {0}".format(e))
             push_result(json.dumps(raw_result))
