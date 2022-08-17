@@ -10,7 +10,7 @@ import redis
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 
 # Rest API endpoint where we want to gather doi's to check from.
-API_ENDPOINT =  os.getenv('API_ENDPOINT', 'https://api.datacite.org/works')
+API_ENDPOINT =  os.getenv('API_ENDPOINT', 'https://api.test.datacite.org/works')
 
 # Redis key collections for urls and results
 START_URLS_KEY = os.getenv('START_URLS_KEY', 'pidcheck:start_urls')
@@ -21,8 +21,8 @@ REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = os.getenv('REDIS_PORT', 6379)
 
 # Configure basic logging
+logging.basicConfig(level=LOG_LEVEL)
 logger = logging.getLogger()
-logger.setLevel(level=LOG_LEVEL)
 
 def get_samples(sample_per_client=1):
     """Get random samples of doi's across clients"""

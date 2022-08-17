@@ -27,8 +27,8 @@ ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 BATCH_SIZE = os.getenv('BATCH_SIZE', 500)
 
 # Configure basic logging
+logging.basicConfig(level=LOG_LEVEL)
 logger = logging.getLogger()
-logger.setLevel(level=LOG_LEVEL)
 
 # Redis server connector
 redis = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=0)
