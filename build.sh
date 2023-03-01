@@ -26,4 +26,4 @@ function packagePythonLambda {
 
 packagePythonLambda 'store_crawler_results'
 packagePythonLambda 'check_links'
-packagePythonLambda 'run_analytics_worker'
+packagePythonLambda 'analytics_worker'
