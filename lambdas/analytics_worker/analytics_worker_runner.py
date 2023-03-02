@@ -41,7 +41,7 @@ def run_generate_report(repo_id, begin_date, end_date, platform, publisher, publ
         overrides={
             'containerOverrides': [
                 {
-                    'name': 'analytics-worker-stage-' + repo_id,
+                    'name': 'analytics-worker-stage',
                     'environment': [
                         {
                             'name': 'REPO_ID',
@@ -74,7 +74,7 @@ def run_generate_report(repo_id, begin_date, end_date, platform, publisher, publ
         count=1
     )
 
-    return 'response'
+    return response
 
 # Lambda handler
 def lambda_handler(event, context):
