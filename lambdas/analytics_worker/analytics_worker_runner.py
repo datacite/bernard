@@ -7,6 +7,7 @@ AWS_SECURITY_GROUP = os.getenv('AWS_SECURITY_GROUP')
 AWS_DATACITE_SUBNET_PRIVATE = os.getenv('AWS_DATACITE_SUBNET_PRIVATE')
 AWS_DATACITE_SUBNET_ALT = os.getenv('AWS_DATACITE_SUBNET_ALT')
 AWS_CLUSTER = os.getenv('AWS_CLUSTER')
+TASK_DEFINITION = os.getenv('TASK_DEFINITION')
 
 
 # Function to get reports to generate
@@ -25,7 +26,7 @@ def run_generate_report(repo_id, begin_date, end_date, platform, publisher, publ
     # Run task on fargate with environment variable overrides
     response = ecs_client.run_task(
         cluster=AWS_CLUSTER,
-        taskDefinition='analytics-worker-stage',
+        taskDefinition=TASK_DEFINITION,
         launchType='FARGATE',
         networkConfiguration={
             'awsvpcConfiguration': {
@@ -41,7 +42,7 @@ def run_generate_report(repo_id, begin_date, end_date, platform, publisher, publ
         overrides={
             'containerOverrides': [
                 {
-                    'name': 'analytics-worker-stage',
+                    'name': TASK_DEFINITION,
                     'environment': [
                         {
                             'name': 'REPO_ID',
