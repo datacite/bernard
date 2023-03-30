@@ -1,6 +1,7 @@
 import os
 import datetime
 import boto3
+import json
 
 # Get environment variables for aws configuration
 AWS_SECURITY_GROUP = os.getenv('AWS_SECURITY_GROUP')
@@ -9,6 +10,14 @@ AWS_DATACITE_SUBNET_ALT = os.getenv('AWS_DATACITE_SUBNET_ALT')
 AWS_CLUSTER = os.getenv('AWS_CLUSTER')
 TASK_DEFINITION = os.getenv('TASK_DEFINITION')
 
+class Report:
+    def __init__(self, repo_id, begin_date, end_date, platform, publisher, publisher_id):
+        self.repo_id = repo_id
+        self.begin_date = begin_date
+        self.end_date = end_date
+        self.platform = platform
+        self.publisher = publisher
+        self.publisher_id = publisher_id
 
 # Function to get reports to generate
 def get_reports_to_generate():
@@ -88,19 +97,34 @@ def lambda_handler(event, context):
     default_begin_date = default_begin_date.strftime('%Y-%m-%d')
     default_end_date = default_end_date.strftime('%Y-%m-%d')
 
-    # Get report parameters from event object
-    repo_id = event.get('repo_id', '')
-    begin_date = event.get('begin_date', default_begin_date)
-    end_date = event.get('end_date', default_end_date)
-    platform = event.get('platform', '')
-    publisher = event.get('publisher', '')
-    publisher_id = event.get('publisher_id', '')
+    reports_to_generate = []
+    # Parse SQS records from event
+    if 'Records' in event:
+        for record in event['Records']:
+            if 'body' in record:
+                event = json.loads(record['body'])
 
-    # If the repo_id is not set, get all reports to generate
-    if repo_id == '':
-        reports_to_generate = get_reports_to_generate()
+                # Get report parameters from parsed event
+                repo_id = event.get('repo_id', '')
+                begin_date = event.get('begin_date', default_begin_date)
+                end_date = event.get('end_date', default_end_date)
+                platform = event.get('platform', '')
+                publisher = event.get('publisher', '')
+                publisher_id = event.get('publisher_id', '')
+
+                report = Report(repo_id, begin_date, end_date, platform, publisher, publisher_id)
+                reports_to_generate.append(report)
     else:
-        reports_to_generate = [repo_id]
+        # Get report parameters from event object
+        repo_id = event.get('repo_id', '')
+        begin_date = event.get('begin_date', default_begin_date)
+        end_date = event.get('end_date', default_end_date)
+        platform = event.get('platform', '')
+        publisher = event.get('publisher', '')
+        publisher_id = event.get('publisher_id', '')
+
+        report = Report(repo_id, begin_date, end_date, platform, publisher, publisher_id)
+        reports_to_generate.append(report)
 
     # If no reports to generate, return
     if len(reports_to_generate) == 0:
@@ -117,7 +141,7 @@ def lambda_handler(event, context):
 if __name__ == '__main__':
     # For local testing fake the arguments to lambda handler function
     event = {
-        'repo_id': 'crossref',
+        'repo_id': 'datacite',
     }
     context = []
     lambda_handler(event, context)
