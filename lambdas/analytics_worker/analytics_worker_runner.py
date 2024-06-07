@@ -10,15 +10,6 @@ AWS_DATACITE_SUBNET_ALT = os.getenv('AWS_DATACITE_SUBNET_ALT')
 AWS_CLUSTER = os.getenv('AWS_CLUSTER')
 TASK_DEFINITION = os.getenv('TASK_DEFINITION')
 
-class Report:
-    def __init__(self, repo_id, begin_date, end_date, platform, publisher, publisher_id):
-        self.repo_id = repo_id
-        self.begin_date = begin_date
-        self.end_date = end_date
-        self.platform = platform
-        self.publisher = publisher
-        self.publisher_id = publisher_id
-
 # Function to get reports to generate
 def get_reports_to_generate():
     # Not implemented
@@ -86,6 +77,18 @@ def run_generate_report(repo_id, begin_date, end_date, platform, publisher, publ
 
     return response
 
+class Report:
+    def __init__(self, repo_id, begin_date, end_date, platform, publisher, publisher_id):
+        self.repo_id = repo_id
+        self.begin_date = begin_date
+        self.end_date = end_date
+        self.platform = platform
+        self.publisher = publisher
+        self.publisher_id = publisher_id
+
+    def generate_report(self):
+        run_generate_report(self.repo_id, self.begin_date, self.end_date, self.platform, self.publisher, self.publisher_id)
+
 # Lambda handler
 def lambda_handler(event, context):
     """Lambda process handler"""
@@ -131,12 +134,14 @@ def lambda_handler(event, context):
         return 'No reports to generate'
 
     # Loop through reports to generate
-    response = ''
+    responses= []
     for report in reports_to_generate:
-        response = run_generate_report(repo_id, begin_date, end_date, platform, publisher, publisher_id)
+        # Generate report
+        response = report.generate_report()
+        responses.append(response)
 
-    # Print response
-    return str(response)
+    # Print responses
+    return json.dumps(responses)
 
 if __name__ == '__main__':
     # For local testing fake the arguments to lambda handler function
