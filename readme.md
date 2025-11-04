@@ -21,6 +21,12 @@ Works in collaboration with the analytics service [Keeshond](https://github.com/
 * analytics_worker - Takes messages from SQS and spins up fargate tasks for report generation workers
 * analytics_queue_reports - Retrieves what repositories have analytics set up and adds to SQS queue
 
+### Data File Generation
+
+Works with the data file generator service [Alopekis](https://github.com/datacite/alpekis)
+
+* datafile_generator - Runs the datafile generation container in Fargate
+
 ## Building
 
 ./build.sh - This will produce zip files in the 'build' directory
