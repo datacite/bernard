@@ -20,6 +20,7 @@ def run_datafile_generator():
         cluster=AWS_CLUSTER,
         taskDefinition=TASK_DEFINITION,
         launchType='FARGATE',
+        enableExecuteCommand=True,
         networkConfiguration={
             'awsvpcConfiguration': {
                 'subnets': [
