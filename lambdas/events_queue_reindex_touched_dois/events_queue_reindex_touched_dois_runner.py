@@ -18,14 +18,15 @@ def lambda_handler(event, context):
     queue_name = os.getenv('QUEUE_NAME')
 
     # Calculate the date range for the reindex
-    today = datetime.date.today().strftime("%Y-%m-%d")
+    yesterday = datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1)
+    yesterday = yesterday.strftime("%Y-%m-%d")
 
     message = {
         'Name': 'shoryuken_class',
         'Type': 'String',
         'Value': 'ReindexTouchedDoisWorker',
 
-        'date': today,
+        'date': yesterday,
     }
 
     # Queue a task for each repository
@@ -33,7 +34,7 @@ def lambda_handler(event, context):
     queue = sqs.get_queue_by_name(QueueName=queue_name)
     queue.send_message(MessageBody=json.dumps(message))
 
-    return("Queued reindex for dois touched on {}".format(today))
+    return("Queued reindex for dois touched on {}".format(yesterday))
 
 if __name__ == '__main__':
     # For local testing fake the arguments to lambda handler function
