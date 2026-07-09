@@ -1,0 +1,19 @@
+services:
+  lambda:
+    image: python:3.14.6-alpine
+    environment:
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - QUEUE_NAME
+    networks:
+      - localstack_network
+    volumes:
+      - ${LAMBDA_DIR}:/var/task
+    working_dir: /var/task
+    command: sh -c "pip install --quiet -r requirements.txt && python ${LAMBDA_PATH}"
+
+networks:
+  localstack_network:
+    external: true
