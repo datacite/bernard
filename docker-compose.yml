@@ -1,6 +1,6 @@
 services:
   lambda:
-    image: python:3.14.6-alpine
+    image: python:3.10-alpine
     environment:
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
