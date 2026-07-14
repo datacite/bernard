@@ -6,7 +6,7 @@ Events will call the `reindex_touched_dois` method to reindex the DOIs touched t
 
 import os
 import json
-import datetime
+from datetime import datetime, timedelta, timezone
 import boto3
 
 # Lambda handler
@@ -18,7 +18,7 @@ def lambda_handler(event, context):
     queue_name = os.getenv('QUEUE_NAME')
 
     # Calculate the date range for the reindex
-    yesterday = datetime.datetime.now(datetime.UTC) - datetime.timedelta(days=1)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
     yesterday = yesterday.strftime("%Y-%m-%d")
 
     message = {
